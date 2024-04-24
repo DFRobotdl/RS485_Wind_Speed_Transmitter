@@ -2,24 +2,25 @@
 #define __RS485_Wind_Speed_Transmitter_H__
 
 #include <stdio.h>
-#include <unistd.h>
-#include <errno.h>
+#include <stdlib.h>
 #include <string.h>
-
-#include <wiringPi.h>
-
-#include <wiringSerial.h>
-
-
-int fd;
-
+#include <unistd.h>
+#include <fcntl.h>
+#include <termios.h>
+#include <sys/time.h>
 
 /**
-  @brief  initialize serial port
-  @param  device Address of serial port，In Linux, it is the directory where the device is located.
-  @return  Return 1 for initialization failure, and return 0 for initialization success
+  @brief Initialize sensor serial port
+  @param dev Seriial
+  @return 1: Success, 0: Failure.
 */
-unsigned char Init(char *device);
+char InitSensor(char *dev);
+
+/**
+  @brief delay function
+  @param data Delay time in milliseconds
+*/
+void delayms(int data);
 
 /**
   @brief  Modify address
@@ -42,7 +43,6 @@ void addedCRC(unsigned char *buf, int len);
   @return  The return value ≥0 indicates successful reading, the return value is wind speed, and the return value -1 indicates failed reading
 */
 float readWindSpeed(unsigned char Address);
-
 
 /**
   @brief  Calculate parity bit
