@@ -1,21 +1,20 @@
 #include "RS485_Wind_Speed_Transmitter.h"
 
-
-int main()
-{
+int main() {
   char Address = 2;
   float WindSpeed = 0;
-  while (Init("/dev/ttyUSB0")) {
-    delay(1000);
+  while (InitSensor("/dev/ttyUSB0") == 0) {
+    delayms(1000);
   }
 
-
-//Modify sensor address
-//   if (!ModifyAddress(0, Address)) {
-//     printf("Please check whether the sensor connection is normal\n");
-//     return 0;
-//   }
-
+  // Modify sensor address
+  if (ModifyAddress(0, Address)) {
+    printf("Address modified successfully.\n");
+  } else {
+    printf("Address modification failed!\n");
+    printf("Please check whether the sensor connection is normal\n");
+    return 0;
+  }
 
   while (1) {
     WindSpeed = readWindSpeed(Address);
@@ -25,8 +24,8 @@ int main()
       printf("Please check whether the sensor connection is normal\n");
       return 0;
     }
-    delay(50);
+    delayms(50);
   }
-  serialClose(fd);
+  // serialClose(fd);
   return 1;
 }
